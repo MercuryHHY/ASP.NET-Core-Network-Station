@@ -5,7 +5,7 @@ namespace FileService.Domain.Entities
 {
 
     /// <summary>
-    /// 聚合根
+    /// 聚合根，在这里也是也是数据库表对应的实体类
     /// </summary>
     public record UploadedItem : BaseEntity, IHasCreationTime
     {
