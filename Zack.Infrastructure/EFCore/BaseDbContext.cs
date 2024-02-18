@@ -48,5 +48,11 @@ namespace Zack.Infrastructure.EFCore
             //就会造成已经软删除的数据仍然能够通过FindAsync查到的问题，因此这里把对应跟踪对象的state改为Detached，就会从缓存中删除了
             return result;
         }
+    
+        
+    
+    
+    
+    
     }
 }

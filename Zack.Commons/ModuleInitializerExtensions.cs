@@ -16,10 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IServiceCollection RunModuleInitializers(this IServiceCollection services,
 		 IEnumerable<Assembly> assemblies)
 		{
-			foreach(var asm in assemblies)
+            //遍历所有程序集，assemblies实参由反射获取
+            foreach (var asm in assemblies)
             {
 				Type[] types = asm.GetTypes();
-				var moduleInitializerTypes = types.Where(t => !t.IsAbstract && typeof(IModuleInitializer).IsAssignableFrom(t));
+                //扫描是否有实现了 IModuleInitializer接口的类 
+                var moduleInitializerTypes = types.Where(t => !t.IsAbstract && typeof(IModuleInitializer).IsAssignableFrom(t));
 				foreach(var implType in moduleInitializerTypes)
                 {
 					var initializer = (IModuleInitializer?)Activator.CreateInstance(implType);

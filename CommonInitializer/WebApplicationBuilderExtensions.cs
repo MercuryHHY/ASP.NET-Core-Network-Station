@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MySqlConnector;
 using Serilog;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -15,6 +16,7 @@ using Zack.Commons;
 using Zack.Commons.JsonConverters;
 using Zack.EventBus;
 using Zack.JWT;
+using Pomelo.EntityFrameworkCore.MySql;
 
 namespace CommonInitializer
 {
@@ -28,7 +30,8 @@ namespace CommonInitializer
                 //var configRoot = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
                 //string connStr = configRoot.GetValue<string>("DefaultDB:ConnStr");
                 string connStr = builder.Configuration.GetValue<string>("DefaultDB:ConnStr");
-                configBuilder.AddDbConfiguration(() => new SqlConnection(connStr), reloadOnChange: true, reloadInterval: TimeSpan.FromSeconds(5));
+                //configBuilder.AddDbConfiguration(() => new SqlConnection(connStr), reloadOnChange: true, reloadInterval: TimeSpan.FromSeconds(5));
+                configBuilder.AddDbConfiguration(() => new MySqlConnection(connStr), reloadOnChange: true, reloadInterval: TimeSpan.FromSeconds(5));
             });
         }
 
@@ -43,8 +46,11 @@ namespace CommonInitializer
                 //连接字符串如果放到appsettings.json中，会有泄密的风险
                 //如果放到UserSecrets中，每个项目都要配置，很麻烦
                 //因此这里推荐放到环境变量中。
-                string connStr = configuration.GetValue<string>("DefaultDB:ConnStr");
-                ctx.UseSqlServer(connStr);
+                //string connStr = configuration.GetValue<string>("DefaultDB:ConnStr");
+                string connStr = configuration.GetValue<string>("DefaultDB:ConnStr", "server=127.0.0.1;Database=aspnetcorewebsite;Uid=root;Pwd=root;sslMode=None");
+                //ctx.UseSqlServer(connStr);
+                ctx.UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 31)));
+
             }, assemblies);
 
             //开始:Authentication,Authorization

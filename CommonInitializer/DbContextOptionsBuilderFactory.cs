@@ -13,7 +13,7 @@ namespace CommonInitializer
             
             //改用MySQL
             //optionsBuilder.UseSqlServer(connStr);
-            optionsBuilder.UseMySql(connStr, new MySqlServerVersion(new Version(8, 6, 26)));
+            optionsBuilder.UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 31)));
             return optionsBuilder;
         }
     }
